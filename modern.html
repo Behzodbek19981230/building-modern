@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModernBuild - Zamonaviy Qurilish</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff6b6b',
+                        secondary: '#2c3e50',
+                        accent: '#4ecdc4',
+                        success: '#26de81',
+                        dark: '#34495e',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.6s ease-out forwards',
+                        'slide-left': 'slideLeft 0.6s ease-out forwards',
+                        'scale-in': 'scaleIn 0.5s ease-out forwards',
+                        'gradient': 'gradient 3s ease infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(100px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideLeft: {
+                            '0%': { transform: 'translateX(-100px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                        gradient: {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                            '100%': { backgroundPosition: '0% 50%' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.6);
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .morphing-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .morphing-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .morphing-button:hover::before {
+            left: 100%;
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        .bg-animated {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        .loader {
+            position: relative;
+        }
+        
+        .loader::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #6366f1, transparent);
+            top: 0;
+            left: -100%;
+            animation: loading 2s linear infinite;
+        }
+        
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1, #f59e0b);
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+        
+        /* Hero Slider Styles */
+        .hero-slider {
+            position: relative;
+        }
+        
+        .slide {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .slide.active {
+            opacity: 1;
+        }
+        
+        .slider-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .slider-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+        }
+        
+        .dot.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
+        
+        @media (max-width: 768px) {
+            .floating-animation {
+                animation: none;
+            }
+            
+            .slider-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 overflow-x-hidden">
+    <!-- Scroll Indicator -->
+    <div id="scroll-indicator" class="scroll-indicator"></div>
+
+    <!-- Particles Background -->
+    <div id="particles" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-50 bg-white bg-opacity-90 backdrop-blur-lg shadow-lg">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3 animate-slide-left">
+                    <div class="relative">
+                        <div class="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center animate-pulse-slow">
+                            <i class="fas fa-cube text-white text-xl"></i>
+                        </div>
+                        <div class="absolute -top-1 -right-1 w-4 h-4 bg-accent rounded-full animate-bounce"></div>
+                    </div>
+                    <h1 class="text-2xl font-bold gradient-text">ModernBuild</h1>
+                </div>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 transform hover:scale-110">Bosh sahifa</a>
+                    <a href="#about" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 transform hover:scale-110">Haqimizda</a>
+                    <a href="#services" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 transform hover:scale-110">Xizmatlar</a>
+                    <a href="#projects" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 transform hover:scale-110">Loyihalar</a>
+                    <a href="#contact" class="nav-link text-gray-700 hover:text-primary transition-all duration-300 transform hover:scale-110">Aloqa</a>
+                </nav>
+                
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 focus:outline-none transform transition-transform duration-300 hover:scale-110">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white bg-opacity-95 backdrop-blur-lg shadow-lg">
+            <div class="px-6 py-4 space-y-4">
+                <a href="#home" class="block text-gray-700 hover:text-primary transition duration-300 animate-slide-up">Bosh sahifa</a>
+                <a href="#about" class="block text-gray-700 hover:text-primary transition duration-300 animate-slide-up">Haqimizda</a>
+                <a href="#services" class="block text-gray-700 hover:text-primary transition duration-300 animate-slide-up">Xizmatlar</a>
+                <a href="#projects" class="block text-gray-700 hover:text-primary transition duration-300 animate-slide-up">Loyihalar</a>
+                <a href="#contact" class="block text-gray-700 hover:text-primary transition duration-300 animate-slide-up">Aloqa</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Slider -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <!-- Hero Slider -->
+        <div class="hero-slider absolute inset-0">
+            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="absolute inset-0 bg-gradient-to-r from-primary/70 to-accent/70"></div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="absolute inset-0 bg-gradient-to-r from-accent/70 to-success/70"></div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="absolute inset-0 bg-gradient-to-r from-success/70 to-primary/70"></div>
+            </div>
+        </div>
+        
+        <!-- Slider Navigation -->
+        <div class="absolute top-1/2 left-6 transform -translate-y-1/2 z-20">
+            <button class="slider-btn prev-btn bg-white bg-opacity-20 backdrop-blur-lg rounded-full p-3 text-white hover:bg-opacity-30 transition-all duration-300">
+                <i class="fas fa-chevron-left text-xl"></i>
+            </button>
+        </div>
+        <div class="absolute top-1/2 right-6 transform -translate-y-1/2 z-20">
+            <button class="slider-btn next-btn bg-white bg-opacity-20 backdrop-blur-lg rounded-full p-3 text-white hover:bg-opacity-30 transition-all duration-300">
+                <i class="fas fa-chevron-right text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Slider Dots -->
+        <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
+            <button class="dot active w-3 h-3 rounded-full bg-white transition-all duration-300" data-slide="0"></button>
+            <button class="dot w-3 h-3 rounded-full bg-white bg-opacity-50 transition-all duration-300" data-slide="1"></button>
+            <button class="dot w-3 h-3 rounded-full bg-white bg-opacity-50 transition-all duration-300" data-slide="2"></button>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 w-20 h-20 bg-white rounded-full opacity-20 floating-animation"></div>
+        <div class="absolute top-40 right-20 w-16 h-16 bg-white rounded-full opacity-30 floating-animation" style="animation-delay: -2s;"></div>
+        <div class="absolute bottom-40 left-1/4 w-12 h-12 bg-white rounded-full opacity-25 floating-animation" style="animation-delay: -4s;"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center">
+                <div class="animate-scale-in">
+                    <h1 class="text-6xl md:text-8xl font-bold mb-6 text-shadow">
+                        <span class="text-white">Kelajak</span><br>
+                        <span class="text-white">Bu Yerda</span>
+                    </h1>
+                </div>
+                
+                <div class="animate-slide-up" style="animation-delay: 0.3s;">
+                    <p class="text-xl md:text-2xl mb-8 text-white max-w-3xl mx-auto leading-relaxed">
+                        AI va zamonaviy texnologiyalar bilan qurilayotgan kelajak. 
+                        Orzularingizni haqiqatga aylantiruvchi innovatsion yechimlar.
+                    </p>
+                </div>
+                
+                <div class="animate-slide-up flex flex-col sm:flex-row gap-6 justify-center items-center" style="animation-delay: 0.6s;">
+                    <button class="morphing-button bg-white text-primary px-8 py-4 rounded-full font-semibold text-lg hover-glow transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-rocket mr-2 animate-wiggle"></i>Loyihani Boshlash
+                    </button>
+                    <button class="morphing-button bg-white bg-opacity-20 backdrop-blur-lg text-white px-8 py-4 rounded-full font-semibold text-lg hover-glow transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-play mr-2"></i>Demo Ko'rish
+                    </button>
+                </div>
+                
+                <!-- Stats Counter -->
+                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 animate-slide-up" style="animation-delay: 0.9s;">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white counter" data-target="1000">0</div>
+                        <div class="text-gray-200">Loyihalar</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white counter" data-target="25">0</div>
+                        <div class="text-gray-200">Yillik Tajriba</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white counter" data-target="500">0</div>
+                        <div class="text-gray-200">Mijozlar</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white counter" data-target="100">0</div>
+                        <div class="text-gray-200">Mamnuniyat %</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 animate-slide-up">
+                <h2 class="text-5xl font-bold gradient-text mb-6">Biz Kimiz?</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Zamonaviy texnologiyalar va innovatsion yechimlar orqali qurilish sohasini o'zgartiramiz
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="animate-slide-left">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="Zamonaviy bino" class="rounded-2xl shadow-2xl floating-animation">
+                        <div class="absolute -bottom-6 -right-6 bg-gradient-to-r from-primary to-accent p-6 rounded-2xl shadow-xl">
+                            <div class="text-center text-white">
+                                <div class="text-3xl font-bold">AI</div>
+                                <div class="text-sm">Powered</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-8">
+                    <div class="card-hover bg-white shadow-xl p-6 rounded-xl border border-gray-200">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-primary to-red-500 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-brain text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800">AI Texnologiyalar</h3>
+                        </div>
+                        <p class="text-gray-600">Sun'iy intellekt yordamida loyihalarni optimallashtirish va samaradorlikni oshirish</p>
+                    </div>
+                    
+                    <div class="card-hover bg-white shadow-xl p-6 rounded-xl border border-gray-200">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-accent to-teal-500 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-leaf text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800">Eko Qurilish</h3>
+                        </div>
+                        <p class="text-gray-600">Atrof-muhitni himoya qiluvchi va energiya tejaydigan yechimlar</p>
+                    </div>
+                    
+                    <div class="card-hover bg-white shadow-xl p-6 rounded-xl border border-gray-200">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-success to-green-500 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-rocket text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800">Innovatsion Yondashuv</h3>
+                        </div>
+                        <p class="text-gray-600">Har bir loyihada yangicha va ijodiy yechimlarni qo'llash</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-50 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold gradient-text mb-6">Xizmatlarimiz</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Kelajak avlod uchun zamonaviy va aqlli binolar qurish
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="service-card group">
+                    <div class="card-hover bg-gradient-to-br from-purple-600 to-blue-600 p-8 rounded-2xl text-center transform transition-all duration-500 hover:shadow-2xl">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce">
+                            <i class="fas fa-home text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Aqlli Uylar</h3>
+                        <p class="text-gray-200 mb-6">IoT texnologiyalari bilan jihozlangan zamonaviy turar joylar</p>
+                        <button class="morphing-button bg-white text-purple-600 px-6 py-2 rounded-full font-semibold hover-glow">
+                            Batafsil
+                        </button>
+                    </div>
+                </div>
+
+                <div class="service-card group">
+                    <div class="card-hover bg-gradient-to-br from-pink-600 to-red-600 p-8 rounded-2xl text-center transform transition-all duration-500 hover:shadow-2xl">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce">
+                            <i class="fas fa-building text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Smart Office</h3>
+                        <p class="text-gray-200 mb-6">Produktivlikni oshiruvchi zamonaviy ofis binolari</p>
+                        <button class="morphing-button bg-white text-pink-600 px-6 py-2 rounded-full font-semibold hover-glow">
+                            Batafsil
+                        </button>
+                    </div>
+                </div>
+
+                <div class="service-card group">
+                    <div class="card-hover bg-gradient-to-br from-green-600 to-teal-600 p-8 rounded-2xl text-center transform transition-all duration-500 hover:shadow-2xl">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce">
+                            <i class="fas fa-industry text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Sanoat 4.0</h3>
+                        <p class="text-gray-200 mb-6">Robotlashtirish va AI bilan zamonaviy zavod binolari</p>
+                        <button class="morphing-button bg-white text-green-600 px-6 py-2 rounded-full font-semibold hover-glow">
+                            Batafsil
+                        </button>
+                    </div>
+                </div>
+
+                <div class="service-card group">
+                    <div class="card-hover bg-gradient-to-br from-yellow-600 to-orange-600 p-8 rounded-2xl text-center transform transition-all duration-500 hover:shadow-2xl">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce">
+                            <i class="fas fa-solar-panel text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Green Energy</h3>
+                        <p class="text-gray-200 mb-6">Qayta tiklanadigan energiya manbalari bilan ta'minlash</p>
+                        <button class="morphing-button bg-white text-yellow-600 px-6 py-2 rounded-full font-semibold hover-glow">
+                            Batafsil
+                        </button>
+                    </div>
+                </div>
+
+                <div class="service-card group">
+                    <div class="card-hover bg-gradient-to-br from-indigo-600 to-purple-600 p-8 rounded-2xl text-center transform transition-all duration-500 hover:shadow-2xl">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce">
+                            <i class="fas fa-vr-cardboard text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">VR Planning</h3>
+                        <p class="text-gray-200 mb-6">Virtual reality yordamida loyihalarni ko'rish va sozlash</p>
+                        <button class="morphing-button bg-white text-indigo-600 px-6 py-2 rounded-full font-semibold hover-glow">
+                            Batafsil
+                        </button>
+                    </div>
+                </div>
+
+                <div class="service-card group">
+                    <div class="card-hover bg-gradient-to-br from-cyan-600 to-blue-600 p-8 rounded-2xl text-center transform transition-all duration-500 hover:shadow-2xl">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce">
+                            <i class="fas fa-robot text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Auto Construction</h3>
+                        <p class="text-gray-200 mb-6">Robotlar yordamida avtomatik qurilish jarayonlari</p>
+                        <button class="morphing-button bg-white text-cyan-600 px-6 py-2 rounded-full font-semibold hover-glow">
+                            Batafsil
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-white relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold gradient-text mb-6">Loyihalar</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Kelajakdagi shaharlarning namunalari - bizning eng so'nggi loyihalar
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="project-card group relative overflow-hidden rounded-2xl">
+                    <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Futuristik villa" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                    <div class="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-500"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <h3 class="text-2xl font-bold text-white mb-2">Futuristik Villa</h3>
+                        <p class="text-gray-200 mb-4">AI boshqaruvi bilan smart home texnologiyalari</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-primary text-white px-3 py-1 rounded-full text-sm">Tugallandi</span>
+                            <button class="text-white hover:text-primary transition-colors">
+                                <i class="fas fa-arrow-right text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group relative overflow-hidden rounded-2xl">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Smart Office Complex" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                    <div class="absolute inset-0 bg-accent bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-500"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <h3 class="text-2xl font-bold text-white mb-2">Smart Office Complex</h3>
+                        <p class="text-gray-200 mb-4">30 qavatli aqlli ofis binosi IoT tizimi bilan</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-accent text-white px-3 py-1 rounded-full text-sm">Qurilmoqda</span>
+                            <button class="text-white hover:text-accent transition-colors">
+                                <i class="fas fa-arrow-right text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group relative overflow-hidden rounded-2xl">
+                    <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Eco City" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                    <div class="absolute inset-0 bg-success bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-500"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <h3 class="text-2xl font-bold text-white mb-2">Eco City</h3>
+                        <p class="text-gray-200 mb-4">100% qayta tiklanadigan energiya bilan shahar</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-success text-white px-3 py-1 rounded-full text-sm">Loyiha</span>
+                            <button class="text-white hover:text-success transition-colors">
+                                <i class="fas fa-arrow-right text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card group relative overflow-hidden rounded-2xl">
+                    <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Space Station" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                    <div class="absolute inset-0 bg-pink-500 bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-500"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <h3 class="text-2xl font-bold text-white mb-2">Space Research Center</h3>
+                        <p class="text-gray-200 mb-4">Kosmik tadqiqotlar uchun futuristik markaz</p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-pink-500 text-white px-3 py-1 rounded-full text-sm">Kelajak</span>
+                            <button class="text-white hover:text-pink-500 transition-colors">
+                                <i class="fas fa-arrow-right text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gradient-to-br from-primary to-blue-800 relative overflow-hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold text-white mb-6 text-shadow">Kelajakni Biz Bilan Quring</h2>
+                <p class="text-xl text-gray-200 max-w-3xl mx-auto">
+                    Sizning orzularingizni haqiqatga aylantirish uchun bizga murojaat qiling
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <div class="contact-item flex items-center space-x-4 animate-slide-left">
+                            <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center glass-effect">
+                                <i class="fas fa-rocket text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white mb-2">Innovatsion Loyihalar</h3>
+                                <p class="text-gray-200">Har qanday g'oya uchun texnologik yechimlar</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item flex items-center space-x-4 animate-slide-left" style="animation-delay: 0.2s;">
+                            <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center glass-effect">
+                                <i class="fas fa-headset text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white mb-2">24/7 Qo'llab-quvvatlash</h3>
+                                <p class="text-gray-200">Doim sizning xizmatlaringizda</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item flex items-center space-x-4 animate-slide-left" style="animation-delay: 0.4s;">
+                            <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center glass-effect">
+                                <i class="fas fa-shield-alt text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-white mb-2">Kafolat va Ishonch</h3>
+                                <p class="text-gray-200">Sifat va vaqtida bajarish kafolati</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-effect p-8 rounded-2xl animate-scale-in">
+                        <form class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Ismingiz" 
+                                           class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-white focus:border-transparent transition-all duration-300">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" placeholder="Email manzilingiz" 
+                                           class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-white focus:border-transparent transition-all duration-300">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="tel" placeholder="Telefon raqamingiz" 
+                                       class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-white focus:border-transparent transition-all duration-300">
+                            </div>
+
+                            <div class="form-group">
+                                <select class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white focus:ring-2 focus:ring-white focus:border-transparent transition-all duration-300">
+                                    <option class="text-gray-800">Loyiha turini tanlang</option>
+                                    <option class="text-gray-800">Aqlli Uy</option>
+                                    <option class="text-gray-800">Smart Office</option>
+                                    <option class="text-gray-800">Sanoat Binosi</option>
+                                    <option class="text-gray-800">Boshqa</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea rows="4" placeholder="Loyihangiz haqida batafsil ma'lumot bering..." 
+                                          class="w-full px-4 py-3 bg-white bg-opacity-10 border border-white border-opacity-30 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-white focus:border-transparent transition-all duration-300 resize-none"></textarea>
+                            </div>
+
+                            <button type="submit" 
+                                    class="w-full morphing-button bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover-glow transition-all duration-300 transform hover:scale-105">
+                                <i class="fas fa-paper-plane mr-2"></i>Loyihani Boshlash
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-12 border-t border-gray-300">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <div class="flex justify-center items-center space-x-3 mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center animate-pulse">
+                        <i class="fas fa-cube text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold gradient-text">ModernBuild</h3>
+                </div>
+                
+                <p class="text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Kelajak texnologiyalari bilan bugungi orzularni haqiqatga aylantiruvchi kompaniya
+                </p>
+                
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="#" class="text-gray-400 hover:text-primary transition-all duration-300 transform hover:scale-125">
+                        <i class="fab fa-facebook-f text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-all duration-300 transform hover:scale-125">
+                        <i class="fab fa-instagram text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-all duration-300 transform hover:scale-125">
+                        <i class="fab fa-telegram text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-all duration-300 transform hover:scale-125">
+                        <i class="fab fa-youtube text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-all duration-300 transform hover:scale-125">
+                        <i class="fab fa-linkedin text-2xl"></i>
+                    </a>
+                </div>
+                
+                <div class="border-t border-gray-600 pt-8 text-center text-gray-400">
+                    <p>&copy; 2025 ModernBuild. Kelajak bu yerda. Barcha huquqlar himoyalangan.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Scroll Indicator
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.getElementById('scroll-indicator');
+            const scrollTop = window.pageYOffset;
+            const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / documentHeight) * 100;
+            scrollIndicator.style.width = scrollPercent + '%';
+        });
+
+        // Particles Background
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = particle.style.height = (Math.random() * 4 + 1) + 'px';
+                particle.style.background = `hsl(${Math.random() * 60 + 200}, 70%, 70%)`;
+                particle.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.animation = `float ${Math.random() * 10 + 5}s ease-in-out infinite`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                let current = 0;
+                const increment = target / 100;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        counter.textContent = Math.floor(current);
+                        setTimeout(updateCounter, 20);
+                    } else {
+                        counter.textContent = target;
+                    }
+                };
+                
+                // Start animation when element is visible
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCounter();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                
+                observer.observe(counter);
+            });
+        }
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    mobileMenu.classList.add('hidden');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-times');
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-slide-up');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.service-card, .project-card, .contact-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Active navigation
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('text-primary', 'scale-110');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('text-primary', 'scale-110');
+                }
+            });
+        });
+
+        // Form animation
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentNode.classList.add('animate-pulse');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentNode.classList.remove('animate-pulse');
+            });
+        });
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Animate submit button
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i>Yuborilmoqda...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Muvaffaqiyatli yuborildi!';
+                submitBtn.className = submitBtn.className.replace('text-primary', 'text-white').replace('bg-white', 'bg-green-500');
+                
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    submitBtn.className = submitBtn.className.replace('text-white', 'text-primary').replace('bg-green-500', 'bg-white');
+                    this.reset();
+                }, 2000);
+            }, 2000);
+        });
+
+        // Hero Slider
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const nextBtn = document.querySelector('.next-btn');
+        const prevBtn = document.querySelector('.prev-btn');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Auto slide
+        setInterval(nextSlide, 5000);
+
+        // Navigation buttons
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Dot navigation
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                showSlide(currentSlide);
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            animateCounters();
+            showSlide(0);
+        });
+
+        // Mouse follower effect
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.createElement('div');
+            cursor.style.position = 'fixed';
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursor.style.width = '4px';
+            cursor.style.height = '4px';
+            cursor.style.background = '#6366f1';
+            cursor.style.borderRadius = '50%';
+            cursor.style.pointerEvents = 'none';
+            cursor.style.zIndex = '9999';
+            cursor.style.animation = 'fadeOut 0.5s forwards';
+            
+            document.body.appendChild(cursor);
+            
+            setTimeout(() => {
+                cursor.remove();
+            }, 500);
+        });
+
+        // Add fadeOut animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
